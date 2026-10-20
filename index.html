@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Universe for Khushi 💗</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--pink:#ff729e;--deep:#b83268;--cream:#fff8f5;--text:#63394b}
+body{font-family:Georgia,serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+nav{padding:20px;text-align:center;letter-spacing:2px;font-size:12px;color:var(--deep)}
+.hero{min-height:85vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px 22px;background:radial-gradient(circle at 50% 40%,#ffe0eb,#fff8f5 68%)}
+.heart{font-size:64px;animation:beat 1.5s infinite}
+@keyframes beat{50%{transform:scale(1.13)}}
+.tag{font:11px Arial,sans-serif;letter-spacing:3px;text-transform:uppercase;margin:22px 0;color:var(--deep)}
+h1{font-size:clamp(38px,10vw,65px);line-height:1.1;font-weight:normal}
+h1 span{color:var(--pink);font-style:italic}
+p{line-height:1.8}
+.hero p{max-width:340px;margin:22px 0}
+.btn{border:0;background:var(--deep);color:white;border-radius:30px;padding:14px 23px;font-size:14px;cursor:pointer;text-decoration:none;display:inline-block}
+section{padding:65px 22px;text-align:center}
+.eyebrow{font:11px Arial,sans-serif;letter-spacing:3px;color:var(--deep);margin-bottom:15px}
+h2{font-size:32px;font-weight:normal;margin-bottom:20px}
+.card{max-width:440px;margin:25px auto;background:white;border:1px solid #ffe0e9;border-radius:22px;padding:28px;text-align:left;box-shadow:0 10px 35px #b8326810}
+.letter p{margin:14px 0}
+.reasons{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:440px;margin:25px auto}
+.reason{background:#ffe8ef;padding:22px 12px;border-radius:18px;font-size:14px;line-height:1.6}
+.reason b{display:block;font-size:23px;margin-bottom:8px}
+.timeline{max-width:400px;margin:25px auto;text-align:left;border-left:2px solid #ffc3d5;padding-left:22px}
+.moment{margin:22px 0}
+.moment h3{font-size:18px;font-weight:normal;margin-bottom:7px}
+.moment p{font-size:14px}
+.surprise{background:#ffe6ee;border-radius:25px;padding:32px 22px;max-width:440px;margin:auto}
+#secret{display:none;margin-top:22px;line-height:1.9;white-space:pre-line}
+footer{text-align:center;padding:30px 15px 45px;font-size:13px;color:#a66b83}
+.floating{position:fixed;bottom:-30px;pointer-events:none;animation:floatup 7s linear forwards;z-index:10}
+@keyframes floatup{to{transform:translateY(-110vh) rotate(25deg);opacity:0}}
+</style>
+</head>
+<body>
+<nav>MADE WITH LOVE ♡ JUST FOR YOU</nav>
+
+<header class="hero">
+  <div class="heart">💗</div>
+  <div class="tag">A tiny corner of the universe</div>
+  <h1>For my<br><span>Khushi</span> ♡</h1>
+  <p>Out of all the people in this big, beautiful world, there's someone who makes my little world feel extra special.</p>
+  <a class="btn" href="#letter">A little something for you ↓</a>
+</header>
+
+<section id="letter">
+  <div class="eyebrow">WORDS FROM MY HEART</div>
+  <h2>A letter for you 💌</h2>
+  <div class="card letter">
+    <p>My dearest Khushi,</p>
+    <p>I wanted to make you something that feels a little like a hug — something you can come back to whenever you need a smile.</p>
+    <p>You have your own little place in my thoughts, in my random smiles, and in those moments when something reminds me of you.</p>
+    <p>I hope life gives you a thousand reasons to smile, and I hope I get to be one of them. You deserve gentleness, happiness, and all the beautiful little things your heart wishes for.</p>
+    <p>So here's a tiny universe, made with care, just for you. ♡</p>
+    <p>With love,<br><b>Ashish 💗</b></p>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">THE LITTLE THINGS</div>
+  <h2>Reasons you're special 🌷</h2>
+  <div class="reasons">
+    <div class="reason"><b>☀️</b>Your smile<br>makes days brighter</div>
+    <div class="reason"><b>🫶</b>Your presence<br>feels comforting</div>
+    <div class="reason"><b>🌸</b>Your little quirks<br>make you unique</div>
+    <div class="reason"><b>✨</b>Simply being you<br>is something special</div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">OUR LITTLE CORNER</div>
+  <h2>Memories & dreams 📖</h2>
+  <div class="timeline">
+    <div class="moment"><h3>🌱 The beginning</h3><p>The start of a story that deserves its own little universe.</p></div>
+    <div class="moment"><h3>💬 Little conversations</h3><p>All the random talks, silly jokes, and moments worth remembering.</p></div>
+    <div class="moment"><h3>🌙 What comes next</h3><p>More smiles, more memories, and beautiful days still waiting to happen.</p></div>
+  </div>
+  <p style="font-size:13px">We'll personalise these memories together later. ♡</p>
+</section>
+
+<section>
+  <div class="surprise">
+    <div class="eyebrow">A LITTLE SURPRISE</div>
+    <h2>One last thing… 💝</h2>
+    <p>There's something waiting for you inside this little heart.</p>
+    <br>
+    <button class="btn" onclick="reveal()">Open your surprise 💌</button>
+    <div id="secret">Khushi, I hope this little website makes you smile. 💗
+
+You deserve love that feels safe, kindness that feels genuine, and happiness in the smallest things.
+
+Never forget how special you are. 🌷
+
+— Ashish ♡</div>
+  </div>
+</section>
+
+<footer>
+  A little universe, made with love ♡<br><br>
+  Ashish ✨ Khushi
+</footer>
+
+<script>
+function reveal(){
+  const s=document.getElementById('secret');
+  s.style.display='block';
+  s.scrollIntoView({behavior:'smooth',block:'center'});
+  hearts();
+}
+function hearts(){
+  for(let i=0;i<18;i++){
+    const h=document.createElement('span');
+    h.className='floating';
+    h.textContent=['💗','💕','💖','🌸'][Math.floor(Math.random()*4)];
+    h.style.left=Math.random()*100+'vw';
+    h.style.fontSize=(18+Math.random()*22)+'px';
+    h.style.animationDuration=(4+Math.random()*4)+'s';
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),8000);
+  }
+}
+</script>
+</body>
+</html>
