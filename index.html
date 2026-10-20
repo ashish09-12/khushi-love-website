@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,14 +26,36 @@ h2{font-size:32px;font-weight:normal;margin-bottom:20px}
 .reasons{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:440px;margin:25px auto}
 .reason{background:#ffe8ef;padding:22px 12px;border-radius:18px;font-size:14px;line-height:1.6}
 .reason b{display:block;font-size:23px;margin-bottom:8px}
-.timeline{max-width:400px;margin:25px auto;text-align:left;border-left:2px solid #ffc3d5;padding-left:22px}
-.moment{margin:22px 0}
-.moment h3{font-size:18px;font-weight:normal;margin-bottom:7px}
-.moment p{font-size:14px}
+
+/* ---------- GALLERY ---------- */
+.gallery-wrap{max-width:1000px;margin:30px auto 0}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
+.memory{background:white;border:1px solid #ffe0e9;border-radius:22px;overflow:hidden;box-shadow:0 10px 35px #b8326812;text-align:left;opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+.memory.show{opacity:1;transform:none}
+.memory:nth-child(odd){transform:translateY(26px) rotate(-.6deg)}
+.memory:nth-child(even){transform:translateY(26px) rotate(.6deg)}
+.memory.show:nth-child(odd){transform:rotate(-.6deg)}
+.memory.show:nth-child(even){transform:rotate(.6deg)}
+.memory:hover{transform:rotate(0) scale(1.02)!important}
+.media{position:relative;aspect-ratio:4/5;background:#ffe8ef;cursor:pointer;overflow:hidden}
+.media img,.media video{width:100%;height:100%;object-fit:cover;display:block}
+.badge{position:absolute;top:12px;right:12px;background:#ffffffd9;color:var(--deep);font:12px Arial,sans-serif;padding:5px 10px;border-radius:20px}
+.caption{padding:16px 18px 20px;font-size:15px;line-height:1.7}
+.caption small{display:block;font:11px Arial,sans-serif;letter-spacing:2px;color:var(--deep);margin-bottom:6px}
+.empty{max-width:440px;margin:20px auto;font-size:14px;color:#a66b83}
+
+/* lightbox */
+.lb{position:fixed;inset:0;background:#2b0f1de6;display:none;align-items:center;justify-content:center;flex-direction:column;z-index:50;padding:20px}
+.lb.open{display:flex}
+.lb img,.lb video{max-width:100%;max-height:72vh;border-radius:16px}
+.lb-msg{color:white;max-width:480px;text-align:center;margin-top:18px;line-height:1.7}
+.lb button{position:absolute;background:#ffffff26;color:white;border:0;border-radius:50%;width:46px;height:46px;font-size:22px;cursor:pointer}
+.lb .x{top:18px;right:18px}.lb .prev{left:14px;top:50%}.lb .next{right:14px;top:50%}
+
 .surprise{background:#ffe6ee;border-radius:25px;padding:32px 22px;max-width:440px;margin:auto}
 #secret{display:none;margin-top:22px;line-height:1.9;white-space:pre-line}
 footer{text-align:center;padding:30px 15px 45px;font-size:13px;color:#a66b83}
-.floating{position:fixed;bottom:-30px;pointer-events:none;animation:floatup 7s linear forwards;z-index:10}
+.floating{position:fixed;bottom:-30px;pointer-events:none;animation:floatup 7s linear forwards;z-index:60}
 @keyframes floatup{to{transform:translateY(-110vh) rotate(25deg);opacity:0}}
 </style>
 </head>
@@ -73,15 +94,14 @@ footer{text-align:center;padding:30px 15px 45px;font-size:13px;color:#a66b83}
   </div>
 </section>
 
-<section>
+<section id="memories">
   <div class="eyebrow">OUR LITTLE CORNER</div>
-  <h2>Memories & dreams 📖</h2>
-  <div class="timeline">
-    <div class="moment"><h3>🌱 The beginning</h3><p>The start of a story that deserves its own little universe.</p></div>
-    <div class="moment"><h3>💬 Little conversations</h3><p>All the random talks, silly jokes, and moments worth remembering.</p></div>
-    <div class="moment"><h3>🌙 What comes next</h3><p>More smiles, more memories, and beautiful days still waiting to happen.</p></div>
+  <h2>Our memories 📖</h2>
+  <p style="font-size:14px">Tap any memory to see it bigger 💕</p>
+  <div class="gallery-wrap">
+    <div class="gallery" id="gallery"></div>
+    <p class="empty" id="empty" style="display:none">Memories will appear here once the photos and videos are added to the GitHub <b>media</b> folder ♡</p>
   </div>
-  <p style="font-size:13px">We'll personalise these memories together later. ♡</p>
 </section>
 
 <section>
@@ -106,7 +126,177 @@ Never forget how special you are. 🌷
   Ashish ✨ Khushi
 </footer>
 
+<div class="lb" id="lb">
+  <button class="x" onclick="closeLB()" aria-label="Close">✕</button>
+  <button class="prev" onclick="step(-1)" aria-label="Previous">‹</button>
+  <button class="next" onclick="step(1)" aria-label="Next">›</button>
+  <div id="lbMedia"></div>
+  <div class="lb-msg" id="lbMsg"></div>
+</div>
+
 <script>
+/* ============================================================
+   1) CHANGE THESE 4 LINES to match your GitHub repo
+   ============================================================ */
+const GH_USER   = "YOUR_GITHUB_USERNAME";
+const GH_REPO   = "YOUR_REPO_NAME";
+const GH_BRANCH = "main";
+const GH_FOLDER = "media";      // folder inside the repo that holds the photos/videos
+
+/* 2) Captions are matched to files in order (1st file -> 1st message...).
+      Add, remove or rewrite them freely. If there are more files than
+      messages, the messages simply repeat. */
+const MESSAGES = [
+  "The first time I saw this smile, I knew I was in trouble 💗",
+  "You look like my favourite kind of Sunday morning ☀️",
+  "Not me smiling at my phone like a fool because of you 🙈",
+  "Some people are just pure sunshine. You’re one of them 🌸",
+  "If cuteness was a currency, you’d be the richest girl alive 💸",
+  "This one lives rent-free in my camera roll 📸",
+  "Your laugh is my favourite sound in the whole world 🎶",
+  "Look at you, making ordinary moments feel magical ✨",
+  "I’d choose this moment again and again 💕",
+  "You + me = my favourite equation 🧮♡",
+  "Every picture of you is a tiny reason to smile 😊",
+  "Warning: extreme cuteness ahead 🚨🌷",
+  "You make my heart do little cartwheels 🤸‍♂️💗",
+  "Home isn’t a place. It’s feeling like this with you 🏡",
+  "This is the face of someone I adore endlessly 🥹",
+  "Even your silly faces are my favourite 😜",
+  "Hold my hand and let’s never let go 🤍",
+  "You make the boring days feel like adventures 🌍",
+  "Pretty sure the stars borrowed your sparkle ⭐",
+  "My favourite notification is your name 📱💌",
+  "Falling for you was the easiest thing I’ve ever done 🍃",
+  "This memory is going straight into my heart’s album 📖",
+  "Chai tastes better when you’re around ☕",
+  "You’re the plot twist I never saw coming, and I love it 🎬",
+  "Soft heart, bright eyes, and the kindest soul 🌼",
+  "Can we please pause time right here? ⏸️💗",
+  "You make me want to be a better human 🌱",
+  "Cutest. Girl. Ever. No arguments accepted 🙅‍♂️💖",
+  "Little moments with you are my biggest treasures 💎",
+  "If I could, I’d keep this day on repeat 🔁",
+  "Your hugs are my safest place 🫂",
+  "Thank you for being you, exactly as you are 🌷",
+  "Another day, another reason I’m lucky to know you 🍀",
+  "You light up every room (and every photo) 💡",
+  "I don’t need fairytales. I have you 👑",
+  "Forever isn’t long enough for all the things I want to tell you ♾️",
+  "Look at that smile… yes, I’m melting 🫠",
+  "You are my calm, my chaos, and my happy place 🌈",
+  "Here’s to many more memories together 🥂",
+  "Khushi, you’re my favourite person. Always. 💗"
+];
+
+/* Optional: write a custom message for ONE specific file.
+   Example:  "05.mp4": "Our first road trip together 🚗💗"  */
+const SPECIAL = {
+  // "01.jpg": "The day I realised I was falling for you 💗",
+};
+
+/* Used only if GitHub can't be reached (rate limit / offline). */
+const FALLBACK_FILES = [];   // e.g. ["01.jpg","02.jpg","03.mp4"]
+
+let MEMORIES = [];
+
+const MEDIA_RE = /\.(jpe?g|png|webp|gif|avif|heic|mp4|mov|webm|m4v)$/i;
+const rawUrl = f => `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/${GH_BRANCH}/${GH_FOLDER}/${encodeURIComponent(f)}`;
+
+async function loadFromGitHub(){
+  let files = [];
+  try{
+    const api = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${GH_FOLDER}?ref=${GH_BRANCH}`;
+    const r = await fetch(api);
+    if(!r.ok) throw new Error(r.status);
+    const list = await r.json();
+    files = list.filter(x=>x.type==='file' && MEDIA_RE.test(x.name)).map(x=>x.name);
+  }catch(e){
+    console.warn('GitHub API unavailable, using fallback list', e);
+    files = FALLBACK_FILES.slice();
+  }
+  files.sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+  MEMORIES = files.map((f,i)=>({
+    f, src: rawUrl(f),
+    m: SPECIAL[f] || MESSAGES[i % MESSAGES.length]
+  }));
+}
+
+const isVideo = f => /\.(mp4|mov|webm|m4v)$/i.test(f);
+const gallery = document.getElementById('gallery');
+let live = [];   // memories whose files actually loaded
+
+function build(){
+  MEMORIES.forEach((it,i)=>{
+    const src = it.src;
+    const card = document.createElement('article');
+    card.className = 'memory';
+    const media = document.createElement('div');
+    media.className = 'media';
+
+    let el;
+    if(isVideo(it.f)){
+      el = document.createElement('video');
+      el.src = src + '#t=0.1';
+      el.muted = true; el.playsInline = true; el.preload = 'metadata';
+      const b = document.createElement('span'); b.className='badge'; b.textContent='▶ video';
+      media.appendChild(b);
+      el.addEventListener('loadeddata', ()=>ok(card,it,src));
+    } else {
+      el = document.createElement('img');
+      el.src = src; el.loading = 'lazy'; el.alt = it.m;
+      el.addEventListener('load', ()=>ok(card,it,src));
+    }
+    el.addEventListener('error', ()=>card.remove());
+    media.prepend(el);
+
+    const cap = document.createElement('div');
+    cap.className = 'caption';
+    cap.innerHTML = '<small>MEMORY ' + String(i+1).padStart(2,'0') + '</small>';
+    cap.appendChild(document.createTextNode(it.m));
+
+    card.append(media, cap);
+    gallery.appendChild(card);
+    media.onclick = ()=>openLB(live.findIndex(x=>x.src===src));
+    io.observe(card);
+  });
+  setTimeout(()=>{ if(!gallery.children.length) document.getElementById('empty').style.display='block'; },1500);
+}
+function ok(card,it,src){ if(!live.find(x=>x.src===src)) live.push({src,m:it.m,v:isVideo(it.f)}); }
+
+/* fade-in on scroll */
+const io = new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target); }
+}),{threshold:.12});
+
+/* lightbox */
+let cur = 0;
+const lb = document.getElementById('lb');
+function openLB(i){
+  live.sort((a,b)=>MEMORIES.findIndex(x=>x.src===a.src)-MEMORIES.findIndex(x=>x.src===b.src));
+  cur = Math.max(0,i); show(); lb.classList.add('open');
+}
+function show(){
+  const it = live[cur]; if(!it) return;
+  const box = document.getElementById('lbMedia');
+  box.innerHTML = '';
+  let el;
+  if(it.v){ el = document.createElement('video'); el.src = it.src; el.controls = true; el.autoplay = true; el.playsInline = true; }
+  else { el = document.createElement('img'); el.src = it.src; }
+  box.appendChild(el);
+  document.getElementById('lbMsg').textContent = it.m;
+}
+function step(d){ cur = (cur+d+live.length)%live.length; show(); }
+function closeLB(){ lb.classList.remove('open'); document.getElementById('lbMedia').innerHTML=''; }
+lb.addEventListener('click',e=>{ if(e.target===lb) closeLB(); });
+document.addEventListener('keydown',e=>{
+  if(!lb.classList.contains('open')) return;
+  if(e.key==='Escape') closeLB();
+  if(e.key==='ArrowRight') step(1);
+  if(e.key==='ArrowLeft') step(-1);
+});
+
+/* surprise */
 function reveal(){
   const s=document.getElementById('secret');
   s.style.display='block';
@@ -125,6 +315,7 @@ function hearts(){
     setTimeout(()=>h.remove(),8000);
   }
 }
+loadFromGitHub().then(build);
 </script>
 </body>
 </html>
