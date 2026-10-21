@@ -150,6 +150,98 @@ files.forEach((file, index) => {
 </body>
 </html>
 
+<style>
+/* Soft romantic animations */
+#memory-gallery > div {
+  animation: memoryReveal .8s ease both;
+  transition: transform .25s ease;
+}
+
+#memory-gallery > div:hover {
+  transform: translateY(-4px);
+}
+
+@keyframes memoryReveal {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Floating hearts */
+#floating-hearts {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.love-heart {
+  position: absolute;
+  bottom: -40px;
+  left: var(--left);
+  font-size: var(--size);
+  opacity: 0;
+  animation: heartFloat var(--duration) linear var(--delay) infinite;
+}
+
+@keyframes heartFloat {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  12% { opacity: .65; }
+  85% { opacity: .55; }
+  100% { transform: translateY(-110vh) rotate(35deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #memory-gallery > div,
+  .love-heart {
+    animation: none !important;
+  }
+}
+</style>
+
+<div id="floating-hearts" aria-hidden="true"></div>
+
+<script>
+/* Hide photos and videos that cannot load */
+document.querySelectorAll("#memory-gallery > div").forEach(card => {
+  const media = card.querySelector("img, video");
+  if (!media) {
+    card.remove();
+    return;
+  }
+
+  const hideIfBroken = () => {
+    if (media.tagName === "IMG" && media.complete &&
+        media.naturalWidth === 0) {
+      card.remove();
+    }
+
+    if (media.tagName === "VIDEO" &&
+        media.error) {
+      card.remove();
+    }
+  };
+
+  media.addEventListener("error", () => card.remove());
+  hideIfBroken();
+});
+
+/* Floating hearts and sparkles */
+const heartLayer = document.getElementById("floating-hearts");
+const heartTypes = ["💗", "💕", "🩷", "✨", "♡"];
+
+for (let i = 0; i < 14; i++) {
+  const heart = document.createElement("span");
+  heart.className = "love-heart";
+  heart.textContent = heartTypes[i % heartTypes.length];
+  heart.style.setProperty("--left", (i * 7.3) % 100 + "%");
+  heart.style.setProperty("--size", (14 + i % 4 * 5) + "px");
+  heart.style.setProperty("--duration", (8 + i % 5 * 2) + "s");
+  heart.style.setProperty("--delay", (-i * 1.3) + "s");
+  heartLayer.appendChild(heart);
+}
+</script>
+
 <body>
 <nav>MADE WITH LOVE ♡ JUST FOR YOU</nav>
 
