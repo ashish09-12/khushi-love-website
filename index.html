@@ -283,7 +283,27 @@ for (let i = 0; i < 14; i++) {
     <h2>One last thing… 💝</h2>
     <p>There's something waiting for you inside this little heart.</p>
     <br>
-    <button class="btn" onclick="reveal()">Open your surprise 💌</button>
+
+<button class="btn" id="loveLetterBtn" type="button">Open your surprise 💌</button>
+
+<script>
+document.getElementById('loveLetterBtn').addEventListener('click', function () {
+  const letter = document.getElementById('secret');
+
+  if (!letter) {
+    alert('Love letter section nahi mila!');
+    return;
+  }
+
+  letter.style.display = 'block';
+  letter.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  if (typeof hearts === 'function') {
+    hearts();
+  }
+});
+</script>
+
     
 <div id="secret" style="display:none; margin-top:24px;">
   <div style="background:#fffafc;border:1px solid #f4c5d8;border-radius:22px;padding:24px 18px;text-align:left;box-shadow:0 8px 30px #d96b9820;">
