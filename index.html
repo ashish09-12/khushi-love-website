@@ -59,6 +59,97 @@ footer{text-align:center;padding:30px 15px 45px;font-size:13px;color:#a66b83}
 @keyframes floatup{to{transform:translateY(-110vh) rotate(25deg);opacity:0}}
 </style>
 </head>
+<section id="our-memories" style="padding:28px 14px;text-align:center;background:#fff0f5;color:#63334b;border-radius:20px;margin:20px 0;">
+  <h2>Our Little Memories 💗</h2>
+  <p>Every picture holds a little piece of my heart. 🥹</p>
+  <div id="memory-gallery" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;text-align:center;"></div>
+</section>
+
+<script>
+const files = [
+  "IMG-20261015-WA0011.jpg",
+  "IMG-20261015-WA0013.jpg",
+  "IMG-20261015-WA0015.jpg",
+  "IMG-20261015-WA0017.jpg",
+  "IMG-20261015-WA0019.jpg",
+  "IMG-20261019-WA0000.jpg",
+  "IMG-20261019-WA0001.jpg",
+  "IMG-20261019-WA0002.jpg",
+  "IMG-20261019-WA0003.jpg",
+  "IMG-20261019-WA0004.jpg",
+  "IMG-20261019-WA0005.jpg",
+  "IMG-20261019-WA0006.jpg",
+  "IMG-20261019-WA0008.jpg",
+  "IMG-20261019-WA0009.jpg",
+  "IMG-20261019-WA0010.jpg",
+  "IMG-20261019-WA0011.jpg",
+  "IMG-20261019-WA0012.jpg",
+  "IMG-20261019-WA0013.jpg",
+  "IMG-20261019-WA0014.jpg",
+  "IMG-20261019-WA0015.jpg",
+  "IMG_20261017_114013_801.jpg",
+  "Screenshot_20261017_112518_1.jpg",
+  "SmartSelect_20261013_122357_.jpg",
+  "SmartSelect_20261013_122451_.jpg",
+  "Snapchat-121783121.jpg",
+  "Snapchat-1290971066.mp4",
+  "Snapchat-1384217302.mp4",
+  "Snapchat-1570935000.mp4",
+  "Snapchat-1598655149.jpg",
+  "Snapchat-1669725041.mp4",
+  "Snapchat-1896914941.jpg",
+  "Snapchat-1945545024.mp4",
+  "Snapchat-2003821457.mp4",
+  "Snapchat-2013560616.mp4",
+  "Snapchat-34074743.mp4",
+  "Snapchat-437179331.jpg",
+  "Snapchat-454201674.mp4",
+  "Snapchat-806403386.mp4",
+  "Snapchat-871786632.jpg"
+];
+
+const captions = [
+  "My favourite person 💗",
+  "That beautiful smile 🌷",
+  "My happy place 🧸",
+  "A little piece of my heart 💌",
+  "You make ordinary days special ✨",
+  "My favourite kind of magic 🦋",
+  "If happiness had a face, it'd be yours 💕"
+];
+
+const gallery = document.getElementById("memory-gallery");
+
+files.forEach((file, index) => {
+  const card = document.createElement("div");
+  card.style.cssText = "min-width:0;overflow:hidden;";
+
+  const isVideo = /\.mp4$/i.test(file);
+  const media = document.createElement(isVideo ? "video" : "img");
+
+  media.src = encodeURIComponent(file).replace(/%2F/gi, "/");
+  media.style.cssText = "width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:14px;background:#f8dce8;";
+
+  if (isVideo) {
+    media.controls = true;
+    media.preload = "metadata";
+    media.playsInline = true;
+  } else {
+    media.alt = "A special memory";
+    media.loading = "lazy";
+  }
+
+  const caption = document.createElement("p");
+  caption.textContent = captions[index % captions.length];
+  caption.style.cssText = "font-size:14px;line-height:1.5;margin:8px 2px 14px;";
+
+  card.append(media, caption);
+  gallery.appendChild(card);
+});
+</script>
+</body>
+</html>
+
 <body>
 <nav>MADE WITH LOVE ♡ JUST FOR YOU</nav>
 
