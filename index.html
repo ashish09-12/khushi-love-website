@@ -485,24 +485,24 @@ document.addEventListener('keydown',e=>{
 
 /* surprise */
 function reveal(){
-  const s=document.getElementById('secret');
-  s.style.display='block';
-  s.scrollIntoView({behavior:'smooth',block:'center'});
-  hearts();
-}
-function hearts(){
-  for(let i=0;i<18;i++){
-    const h=document.createElement('span');
-    h.className='floating';
-    h.textContent=['💗','💕','💖','🌸'][Math.floor(Math.random()*4)];
-    h.style.left=Math.random()*100+'vw';
-    h.style.fontSize=(18+Math.random()*22)+'px';
-    h.style.animationDuration=(4+Math.random()*4)+'s';
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),8000);
+  const s = document.getElementById('secret');
+
+  if (!s) {
+    alert('Love letter nahi mila. Please check the secret section ID.');
+    return;
+  }
+
+  s.style.display = 'block';
+  s.style.visibility = 'visible';
+  s.style.opacity = '1';
+  s.style.height = 'auto';
+
+  s.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center'
+  });
+
+  if (typeof hearts === 'function') {
+    hearts();
   }
 }
-loadFromGitHub().then(build);
-</script>
-</body>
-</html>
